@@ -20,6 +20,15 @@ class DatabaseAccessor:
     def __exit__(self, *_) -> None:
         self._close
 
+    def get_pokemon(self, pokedex_id: int) -> str:
+        pokemon = (
+            self._session.query(mapper.NationalPokedex)
+            .filter(mapper.NationalPokedex.pokedex_id == pokedex_id)
+            .one()
+        )
+
+        return pokemon.name
+
 
 def get_database_accessor(connection_url: str) -> DatabaseAccessor:
     return DatabaseAccessor(util.adjust_connection_url(connection_url))
