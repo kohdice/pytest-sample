@@ -24,13 +24,14 @@ pytest = "^7.2.1"
 pytest-mock = "^3.10.0"
 pytest-cov = "^4.0.0"
 taskipy = "^1.11.0"
+pyproject-flake8 = "^6.0.0.post1"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.flake8]
-pytest-parametrize-names-type = csv
+pytest-parametrize-names-type = "csv"
 
 [tool.mypy]
 show_error_context = true
