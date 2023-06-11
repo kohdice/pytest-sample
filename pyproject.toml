@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "access"
+name = "sample"
 version = "0.1.0"
-description = "access."
+description = "sample."
 authors = ["kohdice <kohdice@gmail.com>"]
 readme = "README.md"
 
@@ -51,21 +51,38 @@ line-length = 79
 profile = "black"
 line_length = 79
 
+[tool.coverage.run]
+omit = [
+    "tests/*",
+    ".venv/*",
+]
+
+[tool.taskipy.tasks]
+test = "pytest -s -vv --cov=. --cov-branch --cov-report=html"
+fmt = "task fmt-black && task fmt-isort"
+fmt-black = "black sample tests"
+fmt-isort = "isort sample tests"
+lint = "task lint-black && task lint-flake8 && task lint-mypy"
+lint-flake8 = "flake8 sample tests"
+lint-mypy = "mypy sample tests"
+lint-black = "black --check sample tests"
+docs = "sphinx-apidoc -F -o docs sample && sphinx-build docs docs/build"
+
 
 [project]
-name = "access"
+name = "sample"
 version = "0.1.0"
-description = "access."
+description = "sample."
 readme = "README.md"
 
 [[project.authors]]
 name = "kohdice"
 
 [tool.sphinx-pyproject]
-project = "access"
+project = "sample"
 copyright = "2023, kohdice"
 language = "en"
-package_root = "access"
+package_root = "sample"
 html_theme = "sphinx_rtd_theme"
 todo_include_todos = true
 templates_path = ["_templates"]
@@ -76,14 +93,3 @@ extensions = [
   "sphinx.ext.todo",
   "sphinx.ext.napoleon",
 ]
-
-[tool.taskipy.tasks]
-test = "pytest -s -vv --cov=. --cov-branch --cov-report=html"
-fmt = "task fmt-black && task fmt-isort"
-fmt-black = "black access tests"
-fmt-isort = "isort access tests"
-lint = "task lint-black && task lint-flake8 && task lint-mypy"
-lint-flake8 = "flake8 access tests"
-lint-mypy = "mypy access tests"
-lint-black = "black --check access tests"
-docs = "sphinx-apidoc -F -o docs access && sphinx-build docs docs/build"
