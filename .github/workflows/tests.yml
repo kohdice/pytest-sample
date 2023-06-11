@@ -1,6 +1,6 @@
-name: Continuous Integration of container building
+name: Continuous Integration of Change to workflow to run pytest-sample
 
-run-name: ${{ github.actor }} is testing out container building
+run-name: ${{ github.actor }} is testing out with pytest
 
 on:
   push:
@@ -42,5 +42,5 @@ jobs:
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@main
         with:
-          pytest-coverage-path: ./pytest-coverage.txt
-          junitxml-path: ./pytest.xml
+          pytest-coverage-path: pytest-coverage.txt
+          junitxml-path: pytest.xml
