@@ -34,10 +34,10 @@ jobs:
 
       - name: Run pytest
         run: |
-          docker-compose -f docker/docker-compose.yml exec -it app poetry run pytest --cov=. --cov-branch --cov-report=term-missing --junitxml=pytest.xml | tee pytest-coverage.txt
+          docker-compose -f docker/docker-compose.yml exec -it app poetry run pytest --cov=. --cov-branch --cov-report=term-missing --junitxml=./docker/pytest.xml | tee ./docker/pytest-coverage.txt
 
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@main
         with:
-          pytest-coverage-path: pytest-coverage.txt
-          junitxml-path: pytest.xml
+          pytest-coverage-path: ./docker/pytest-coverage.txt
+          junitxml-path: ./docker/pytest.xml
