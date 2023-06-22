@@ -24,11 +24,17 @@ jobs:
         run: |
           echo Branch: ${{ github.head_ref }}
 
-      - name: Build and Run pytest
+      - name: Build Container
         run: |
           docker-compose -f docker/docker-compose.yml up -d --build
-          docker-compose -f docker/docker-compose.yml exec app poetry install
-          docker-compose -f docker/docker-compose.yml exec app poetry run pytest --cov=. --cov-branch --cov-report=term-missing --junitxml=pytest.xml | tee pytest-coverage.txt
+
+      - name: Install Dependencies
+        run: |
+          docker-compose -f docker/docker-compose.yml exec -it app poetry install
+
+      - name: Run pytest
+        run: |
+          docker-compose -f docker/docker-compose.yml exec -it app poetry run pytest --cov=. --cov-branch --cov-report=term-missing --junitxml=pytest.xml | tee pytest-coverage.txt
 
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@main
