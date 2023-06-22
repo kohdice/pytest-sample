@@ -8,3 +8,4 @@ services:
     volumes:
       - ./..:/workspace
     tty: true
+    command: /bin/bash -c "poetry install"
