@@ -1,4 +1,4 @@
-name: Continuous Integration of Change to workflow to run pytest-sample
+name: Continuous Integration of  pytest-sample
 
 run-name: ${{ github.actor }} is testing out with pytest
 
@@ -13,6 +13,9 @@ on:
 jobs:
   Test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11"]
 
     steps:
       - name: Checkout Code
@@ -24,20 +27,26 @@ jobs:
         run: |
           echo Branch: ${{ github.head_ref }}
 
-      - name: Build Container
-        run: |
-          docker-compose -f docker/docker-compose.yml up -d --build
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
 
-      - name: Install Dependencies
+      - name: Install poetry
         run: |
-          docker-compose -f docker/docker-compose.yml exec -T app poetry install
+          curl -sSL https://install.python-poetry.org | python -
+          echo "$HOME/.poetry/bin" >> $GITHUB_PATH
 
-      - name: Run pytest
+      - name: Poetry Install Dependencies
         run: |
-          docker-compose -f docker/docker-compose.yml exec -T app poetry run pytest --cov=. --cov-branch --cov-report=term-missing --junitxml=./pytest.xml > ./pytest-coverage.txt
+          poetry install
+
+      - name: Test with pytest
+        run: |
+          poetry run pytest --cov=. --cov-report=term-missing --junitxml=pytest.xml | tee pytest-coverage.txt
 
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@main
         with:
-          pytest-coverage-path: ./pytest-coverage.txt
-          junitxml-path: ./pytest.xml
+          pytest-coverage-path: pytest-coverage.txt
+          junitxml-path: pytest.xml

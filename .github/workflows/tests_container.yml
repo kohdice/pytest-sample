@@ -1,0 +1,43 @@
+name: Continuous Integration of pytest-sample with docker
+
+run-name: ${{ github.actor }} is testing out with pytest in docker.
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  Test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Branch Check
+        run: |
+          echo Branch: ${{ github.head_ref }}
+
+      - name: Build Container
+        run: |
+          docker-compose -f docker/docker-compose.yml up -d --build
+
+      - name: Install Dependencies
+        run: |
+          docker-compose -f docker/docker-compose.yml exec -T app poetry install
+
+      - name: Run pytest
+        run: |
+          docker-compose -f docker/docker-compose.yml exec -T app poetry run pytest --cov=. --cov-branch --cov-report=term-missing --junitxml=./pytest.xml > ./pytest-coverage.txt
+
+      - name: Pytest coverage comment
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          pytest-coverage-path: ./pytest-coverage.txt
+          junitxml-path: ./pytest.xml
