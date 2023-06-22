@@ -31,11 +31,11 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          docker-compose exec -T app poetry install
+          docker-compose exec -it app poetry install
 
       - name: Run pytest
         run: |
-          docker-compose exec -T app poetry run pytest --cov=. --cov-branch --cov-report=term-missing --junitxml=pytest.xml | tee pytest-coverage.txt
+          docker-compose exec -it app poetry run pytest --cov=. --cov-branch --cov-report=term-missing --junitxml=pytest.xml | tee pytest-coverage.txt
 
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@main
