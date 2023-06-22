@@ -13,9 +13,6 @@ on:
 jobs:
   Test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.11"]
 
     steps:
       - name: Checkout Code
@@ -27,23 +24,11 @@ jobs:
         run: |
           echo Branch: ${{ github.head_ref }}
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      - name: Install poetry
+      - name: Build and Run pytest
         run: |
-          curl -sSL https://install.python-poetry.org | python -
-          echo "$HOME/.poetry/bin" >> $GITHUB_PATH
-
-      - name: Poetry Install Dependencies
-        run: |
-          poetry install
-
-      - name: Test with pytest
-        run: |
-          poetry run pytest --cov=. --cov-report=term-missing --junitxml=pytest.xml | tee pytest-coverage.txt
+          docker-compose -f docker/docker-compose.yml up -d --build
+          docker-compose -f docker/docker-compose.yml exec app poetry install
+          docker-compose -f docker/docker-compose.yml exec app poetry run pytest --cov=. --cov-branch --cov-report=term-missing --junitxml=pytest.xml | tee pytest-coverage.txt
 
       - name: Pytest coverage comment
         uses: MishaKav/pytest-coverage-comment@main
