@@ -30,7 +30,11 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          docker-compose -f docker/docker-compose.yml exec -it app poetry install
+          docker-compose -f docker/docker-compose.yml exec -T app poetry install
+
+      - name: Wait 20s
+        run: |
+          sleep 10s
 
       - name: Run pytest
         run: |
