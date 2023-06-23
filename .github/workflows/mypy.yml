@@ -1,0 +1,25 @@
+name: mypy
+
+run-name: ${{ github.actor }} is testing out mypy
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  mypy:
+    name: runner / mypy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: tsuyoshicho/action-mypy@v3
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          level: warning
+          workdir: sample
+          execute_command: 'poetry run mypy'
