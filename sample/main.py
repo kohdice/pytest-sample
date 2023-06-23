@@ -13,4 +13,7 @@ class Sample:
     def sample_list_finc(
         self, sample_dict: dict[str, str]
     ) -> list[tuple[str, str]]:
+        print(
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        )
         return [(k, v) for k, v in sample_dict.items()]
