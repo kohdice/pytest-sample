@@ -40,7 +40,7 @@ jobs:
 
       - name: Run pytest
         run: |
-          STAGE=development docker-compose -f docker/docker-compose.yml exec -T app poetry run pytest --cov=. --cov-branch --cov-report=term-missing --junitxml=./pytest.xml > ./pytest-coverage.txt
+          STAGE=development docker-compose -f docker/docker-compose.yml exec -T app poetry run pytest --cov=. --cov-branch --cov-report=term-missing:skip-covered --junitxml=./pytest.xml > ./pytest-coverage.txt
 
       - name: Pytest coverage comment
         id: coverageComment
