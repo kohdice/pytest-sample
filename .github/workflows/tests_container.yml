@@ -10,8 +10,6 @@ on:
   pull_request:
     types: [opened, synchronize]
 
-permissions: write-all
-
 jobs:
   Test:
     runs-on: ubuntu-latest
