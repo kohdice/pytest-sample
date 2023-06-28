@@ -10,6 +10,8 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+permissions: write-all
+
 jobs:
   Test:
     runs-on: ubuntu-latest
@@ -44,6 +46,7 @@ jobs:
         id: coverageComment
         uses: MishaKav/pytest-coverage-comment@main
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           pytest-coverage-path: pytest-coverage.txt
           junitxml-path: pytest.xml
 
